@@ -22,7 +22,7 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd chart
-          # echo $GITHUB_TOKEN | docker login ghcr.io -u stefanmcshane --password-stdin
+          echo $GITHUB_TOKEN | docker login ghcr.io -u stefanmcshane --password-stdin
           helm create obot
           helm package obot
           export CHART_VERSION=$(grep 'version:' ./Chart.yaml | tail -n1 | awk '{ print $2 }')
