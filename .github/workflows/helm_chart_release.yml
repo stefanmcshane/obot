@@ -1,0 +1,29 @@
+name: Release Charts
+
+on:
+  push:
+    branches:
+      - helm-chart-releaser
+
+jobs:
+  release:
+    permissions:
+      contents: write
+      packages: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd chart
+          echo $GITHUB_TOKEN | docker login ghcr.io -u stefanmcshane --password-stdin
+          helm create obot
+          helm package obot
+          export CHART_VERSION=$(grep 'version:' ./Chart.yaml | tail -n1 | awk '{ print $2 }')
+          helm push obot-${CHART_VERSION}.tgz oci://ghcr.io/stefanmcshane
