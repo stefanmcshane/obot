@@ -22,4 +22,4 @@ jobs:
           helm create obot
           helm package obot
           export CHART_VERSION=$(grep 'version:' ./Chart.yaml | tail -n1 | awk '{ print $2 }')
-          helm push <chart-name>-${CHART_VERSION}.tgz oci://ghcr.io/stefanmcshane
+          helm push obot-${CHART_VERSION}.tgz oci://ghcr.io/stefanmcshane
